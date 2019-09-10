@@ -6,13 +6,13 @@ import io.zzl.app.model.remote.PaoService
 /**
  * 页面描述：PaoRepo
  *
- * Created by ditclear on 2018/4/14.
+ * Created by zzl on 9/11.
  */
 class PaoRepo constructor(private val remote:PaoService, private val local :PaoDao){
 
-    fun getArticleDetail(id:Int)= local.getArticleById(id)
+    fun getArticleDetail(numbers: Int, page: Int)= local.getArticleById(numbers, page)
             .onErrorResumeNext {
-                remote.getArticleById(id)
+                remote.getArticleById(numbers, page)
                         .doOnSuccess { local.insertArticle(it) }
             }
 
