@@ -34,12 +34,12 @@
                     android:indeterminateTintMode="src_in"
                     android:visibility="@{vm.loading?View.VISIBLE:View.GONE}" />
 
-                <us.feras.mdv.MarkdownView
+                <TextView
                     android:id="@+id/web_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="@{vm.loading?View.GONE:View.VISIBLE}"
-                    app:markdown="@{vm.content}" />
+                    app:text="@{vm.content}" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

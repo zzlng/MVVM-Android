@@ -1,7 +1,5 @@
 package io.zzl.app.helper
 
-import org.jsoup.Jsoup
-
 /**
  * 页面描述：Utils
  *
@@ -15,16 +13,17 @@ object Utils {
      * @param baseUrl
      * @return
      */
-    fun processImgSrc(content: String, baseUrl: String=Constants.HOST_PAO): String {
-        val document = Jsoup.parse(content)
-        document.setBaseUri(baseUrl)
-        val elements = document.select("img[src]")
-        for (el in elements) {
-            val imgUrl = el.attr("src")
-            if (imgUrl.trim({ it <= ' ' }).startsWith("/")) {
-                el.attr("src", el.absUrl("src"))
-            }
-        }
-        return document.html()
+    fun processImgSrc(content: String, baseUrl: String = Constants.HOST_PAO): String {
+//        val document = Jsoup.parse(content)
+//        document.setBaseUri(baseUrl)
+//        val elements = document.select("img[src]")
+//        for (el in elements) {
+//            val imgUrl = el.attr("src")
+//            if (imgUrl.trim({ it <= ' ' }).startsWith("/")) {
+//                el.attr("src", el.absUrl("src"))
+//            }
+//        }
+//        return document.html()
+        return ""
     }
 }

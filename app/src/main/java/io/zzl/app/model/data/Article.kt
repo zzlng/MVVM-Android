@@ -31,7 +31,4 @@ class Article(var title: String?){
     var pubDate: String? = null
     var thumbnail: String? = null
 
-
-
-
 }
