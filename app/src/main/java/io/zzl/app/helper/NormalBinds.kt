@@ -1,9 +1,9 @@
 package io.zzl.app.helper
 
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.BindingAdapter
-import us.feras.mdv.MarkdownView
 
 /**
  * 页面描述：NormalBinds
@@ -11,9 +11,9 @@ import us.feras.mdv.MarkdownView
  * Created by ditclear on 2017/11/19.
  */
 @BindingAdapter(value = ["markdown"])
-fun bindMarkDown(v: MarkdownView, markdown: String?) {
+fun bindMarkDown(v: TextView, markdown: String?) {
     markdown?.let {
-        v.setMarkdown(it)
+        v.setText(it)
     }
 }
 
