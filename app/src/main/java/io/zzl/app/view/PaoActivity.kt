@@ -16,6 +16,7 @@ import io.zzl.app.R
 import io.zzl.app.databinding.PaoActivityBinding
 import io.zzl.app.viewmodel.PaoViewModel
 import io.reactivex.Single
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class PaoActivity : AppCompatActivity() {
@@ -24,14 +25,17 @@ class PaoActivity : AppCompatActivity() {
         DataBindingUtil.setContentView<PaoActivityBinding>(this, R.layout.pao_activity)
     }
 
-    //di
+    // Lazy Inject ViewModel
+    ///di
     private val mViewModel: PaoViewModel by viewModel()
+//    private lateinit var mViewModel: PaoViewModel
+//    private val mViewModel: PaoViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setSupportActionBar(mBinding.toolbar)
-        ////binding
+        ///binding
         mBinding.vm = mViewModel
     }
 

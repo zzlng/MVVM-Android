@@ -4,15 +4,13 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import io.zzl.app.helper.Utils
-import io.zzl.app.helper.async
-import io.zzl.app.model.data.Article
 import io.zzl.app.model.repository.PaoRepo
 import io.reactivex.Single
 
 /**
  * 页面描述：PaoViewModel
  * @param animal 数据源Model(MVVM 中的M),负责提供ViewModel中需要处理的数据
- * Created by ditclear on 2017/11/17.
+ * Created by zzl on 9/11.
  */
 class PaoViewModel constructor(private val repo: PaoRepo) : ViewModel(){
 

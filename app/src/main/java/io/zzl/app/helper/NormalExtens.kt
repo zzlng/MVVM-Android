@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit
 /**
  * 页面描述：NormalExtens
  *
- * Created by ditclear on 2017/11/19.
+ * Created by zzl on 9/11.
  */
 //fun MarkdownView.setMarkdown(markdown: String?) {
 //    loadMarkdown(markdown, "file:///android_asset/markdown.css")

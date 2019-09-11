@@ -1,20 +1,15 @@
 package io.zzl.app.model.repository
 
-import io.zzl.app.model.local.dao.PaoDao
-import io.zzl.app.model.remote.PaoService
+import io.zzl.app.model.local.dao.BeautyDao
+import io.zzl.app.model.remote.BeautyService
 
-/**
- * 页面描述：PaoRepo
- *
- * Created by zzl on 9/11.
- */
-class PaoRepo constructor(private val remote:PaoService, private val local :PaoDao){
+class PaoRepo constructor(private val remote: BeautyService, private val local: BeautyDao) {
 
-    fun getArticleDetail(numbers: Int, page: Int)= local.getArticleById(numbers, page)
+    fun getBeauties(numbers: Int, page: Int) = withScope
+
+    fun getArticleDetail(numbers: Int, page: Int) = local.getBeautiesByPage(numbers, page)
             .onErrorResumeNext {
-                remote.getArticleById(numbers, page)
+                remote.getBeautiesByPage(numbers, page)
                         .doOnSuccess { local.insertArticle(it) }
             }
-
-
 }

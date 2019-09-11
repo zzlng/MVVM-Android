@@ -8,7 +8,7 @@ import androidx.databinding.BindingAdapter
 /**
  * 页面描述：NormalBinds
  *
- * Created by ditclear on 2017/11/19.
+ * Created by zzl on 9/11.
  */
 @BindingAdapter(value = ["markdown"])
 fun bindMarkDown(v: TextView, markdown: String?) {
