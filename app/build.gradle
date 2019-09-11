@@ -48,6 +48,9 @@ dependencies {
 
     implementation deps.kotlin.stdlib
 
+    implementation deps.kotlinx.co_core
+    implementation deps.kotlinx.co_android
+
     //di
     implementation "org.koin:koin-android-viewmodel:$koin_version"
 

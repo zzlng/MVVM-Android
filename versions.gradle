@@ -24,6 +24,7 @@ versions.glide = "4.8.0"
 versions.hamcrest = "1.3"
 versions.junit = "4.12"
 versions.kotlin = "1.3.41"
+versions.kotlinx_co = "1.3.1"
 versions.lifecycle = "2.2.0-alpha03"
 versions.mockito = "2.25.0"
 versions.mockito_all = "1.10.19"
@@ -122,8 +123,12 @@ kotlin.stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
 kotlin.test = "org.jetbrains.kotlin:kotlin-test-junit:$versions.kotlin"
 kotlin.plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
 kotlin.allopen = "org.jetbrains.kotlin:kotlin-allopen:$versions.kotlin"
-
 deps.kotlin = kotlin
+
+def kotlinx = [:]
+kotlinx.co_core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.kotlinx_co"
+kotlinx.co_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.kotlinx_co"
+deps.kotlinx = kotlinx
 
 deps.paging_ktx = "androidx.paging:paging-runtime-ktx:$versions.paging"
 
@@ -168,7 +173,7 @@ deps.navigation = navigation
 
 ext.deps = deps
 
-def addRepos(RepositoryHandler handler) {
+static def addRepos(RepositoryHandler handler) {
     handler.google()
     handler.jcenter()
     handler.maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
