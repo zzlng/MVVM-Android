@@ -2,10 +2,12 @@ package io.zzl.app.viewmodel
 
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.zzl.app.helper.Utils
 import io.zzl.app.model.repository.PaoRepo
 import io.reactivex.Single
+import io.zzl.app.model.Beauty
 
 /**
  * 页面描述：PaoViewModel
@@ -13,6 +15,11 @@ import io.reactivex.Single
  * Created by zzl on 9/11.
  */
 class PaoViewModel constructor(private val repo: PaoRepo) : ViewModel(){
+
+    val data = MutableLiveData<Array<Beauty>>()
+
+
+
 
     //////////////////data//////////////
     val loading= ObservableBoolean(false)

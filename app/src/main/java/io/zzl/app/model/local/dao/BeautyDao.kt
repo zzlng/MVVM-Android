@@ -13,5 +13,5 @@ interface BeautyDao {
     fun insetAll(articles: List<Beauty>)
 
     @Query("SELECT * FROM Beauties ORDER BY `desc` LIMIT (:page-1)*:numbers , :page*:numbers")
-    suspend fun getBeautiesByPage(numbers: Int, page: Int): Beauty
+    suspend fun getBeautiesByPage(numbers: Int, page: Int): Array<Beauty>
 }
