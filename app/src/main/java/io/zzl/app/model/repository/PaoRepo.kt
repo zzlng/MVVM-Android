@@ -1,20 +1,29 @@
 package io.zzl.app.model.repository
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import io.zzl.app.model.Beauty
 import io.zzl.app.model.local.dao.BeautyDao
 import io.zzl.app.model.remote.BeautyService
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import java.lang.Exception
 
 class PaoRepo constructor(private val remote: BeautyService, private val local: BeautyDao) {
 
-    suspend fun getArticleDetail(numbers: Int, page: Int) : Array<Beauty> {
-        try {
-            return local.getBeautiesByPage(numbers, page)
-        } catch (e: Exception) {
-            return remote.getBeautiesByPage(numbers, page)
-        }
+    suspend fun getBeautiesByPage(numbers: Int, page: Int) = coroutineScope {
 
-        return local.getBeautiesByPage(numbers, page)
+        val data = MutableLiveData<Array<Beauty>>()
+
+        val loadLocal = async {
+            val localData = local.getBeautiesByPage(numbers, page)
+//            localDatadata?.aslo(data.postValue(localData))
+            data.value = localData
+        }.await()
+
+        val refresh = async {
+
+        }
     }
 
 //            = local.getBeautiesByPage(numbers, page)
