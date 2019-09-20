@@ -3,12 +3,11 @@ package io.zzl.app.viewmodel
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.zzl.app.helper.Utils
 import io.zzl.app.model.repository.PaoRepo
 import io.reactivex.Single
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.*
 
 /**
  * 页面描述：PaoViewModel
@@ -18,13 +17,11 @@ import kotlinx.coroutines.coroutineScope
 class PaoViewModel constructor(private val repo: PaoRepo) : ViewModel(){
 
     // livedata
-
-    suspend fun loadBeauty() = coroutineScope {
-        async {
-            repo.getBeautiesByPage(10, 1)
-        }.await()
+    fun loadBeauty() = viewModelScope.async {
+        repo.getBeautiesByPage(10, 1)
     }
 
+    fun a() = CoroutineScope(Dispatchers.IO).async {  }
 
         //////////////////data//////////////
         val loading= ObservableBoolean(false)
