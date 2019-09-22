@@ -2,11 +2,13 @@ package io.zzl.app.viewmodel
 
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.zzl.app.helper.Utils
 import io.zzl.app.model.repository.PaoRepo
 import io.reactivex.Single
+import io.zzl.app.model.data.Beauty
 import kotlinx.coroutines.*
 
 /**
@@ -15,6 +17,8 @@ import kotlinx.coroutines.*
  * Created by zzl on 9/11.
  */
 class PaoViewModel constructor(private val repo: PaoRepo) : ViewModel(){
+
+    val data = MutableLiveData<List<Beauty>>()
 
     // livedata
     fun loadBeauty() = viewModelScope.async {

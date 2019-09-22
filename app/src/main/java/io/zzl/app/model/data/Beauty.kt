@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import java.time.Instant
+import java.util.*
 
 @Entity(tableName = "beauties")
 data class Beauty(
@@ -40,7 +40,7 @@ data class Beauty(
         @SerializedName("who")
         var who: String, // lijinshanmx
 
-        override var creationDate: Instant,
+        override var creationDate: Date,
 
-        override var modificationDate: Instant
+        override var modificationDate: Date
 ) : BaseModel

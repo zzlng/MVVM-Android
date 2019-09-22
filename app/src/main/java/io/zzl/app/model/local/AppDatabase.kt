@@ -6,15 +6,12 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.zzl.app.model.data.Beauty
-import io.zzl.app.model.local.dao.BeautyDao
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import io.zzl.app.model.local.dao.BeautyDAO
 
 @Database(entities = [Beauty::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun beautyDao(): BeautyDao
+    abstract fun beautyDao(): BeautyDAO
 
     companion object {
 

@@ -1,30 +1,35 @@
 package io.zzl.app.model.repository
 
 import androidx.lifecycle.MutableLiveData
-import com.blankj.utilcode.util.CacheMemoryUtils
 import io.zzl.app.model.Result.Error
 import io.zzl.app.model.Result.Success
 import io.zzl.app.model.data.Beauty
-import io.zzl.app.model.local.dao.BeautyDao
+import io.zzl.app.model.local.dao.BaseDAO
+import io.zzl.app.model.local.dao.BeautyDAO
 import io.zzl.app.model.remote.BeautyService
 import kotlinx.coroutines.*
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 import java.util.concurrent.TimeUnit
 
-class PaoRepo constructor(private val remote: BeautyService, private val local: BeautyDao) {
+class PaoRepo constructor(
+        private val remote: BeautyService,
+        private val local: BeautyDAO,
+        private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+) {
 
     companion object {
-        val FRESH_TIMEOUT = TimeUnit.HOURS.toMillis(2)
+        val FRESH_TIMEOUT_HOURS = TimeUnit.HOURS.toMillis(2)
     }
 
-    private var cacheMemory: CacheMemoryUtils? = null
+    private val daoWrapper = BaseDAO.Companion.DAOWrapper(local)
+
+    private var cacheMemory: ConcurrentMap<String, Beauty>? = null
 
     suspend fun getBeauties(forceUpdate: Boolean) = withContext(Dispatchers.IO) {
         // Respond immediately with cache if available and not dirty
         if (!forceUpdate) {
-            cacheMemory?.let { cachedTasks ->
-                return@withContext Success(cachedTasks.values.sortedBy { it.id })
-            }
+
         }
 
         val newTasks = fetchTasksFromRemoteOrLocal(forceUpdate)
@@ -45,31 +50,37 @@ class PaoRepo constructor(private val remote: BeautyService, private val local: 
         return@withContext Error(Exception("Illegal state"))
     }
 
-    suspend fun getBeautiesByPage(numbers: Int, page: Int) = coroutineScope {
+    suspend fun getBeautiesByPage(numbers: Int, page: Int) = withContext(ioDispatcher) {
 
-            val data = MutableLiveData<List<Beauty>>()
+        cacheMemory?.let { cachedBeauties ->
+            return@withContext Success(cachedBeauties.values.sortedBy { it.creationDate })
+        }
 
-            val updated = local.hasNew(FRESH_TIMEOUT)
+        val updated = local.hasNew(FRESH_TIMEOUT_HOURS)
 
-            val loadLocal = async {
-                val localData = local.getBeautiesByPage(numbers, page)
-    //            localDatadata?.aslo(data.postValue(localData))
-                data.value = localData
-            }.await()
+        try {
+            Success(local.getBeautiesByPage(numbers, page))
+        } catch (e: Exception) {
+            Error(e)
+        }
 
-            val refresh = launch {
-                var cm: ConcurrentMap<String, Beauty>? = null
-                withContext(Dispatchers.Default) {
-                    cm?.entries?.removeAll{  it.value.used }
-                }
+        val loadLocal = async {
+
+        }.await()
+
+        val refresh = launch {
+            var cm: ConcurrentMap<String, Beauty>? = null
+            withContext(Dispatchers.Default) {
+                cm?.entries?.removeAll { it.value.used }
             }
+        }
     }
 
     private fun cacheBeauty(beauty: Beauty): Beauty {
         val cachedData = beauty.copy()
         // Create if it doesn't exist.
         if (cacheMemory == null) {
-            cacheMemory = CacheMemoryUtils.getInstance()
+            cacheMemory = ConcurrentHashMap()
         }
         cacheMemory?.put(cachedData.id, cachedData)
         return cachedData

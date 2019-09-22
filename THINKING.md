@@ -3,23 +3,30 @@
 1. coroutine 生命周期
 
     ~~可利用 kotlin-coroutines-android。~~
+    
     现使用 viewModelScope
 
     1. 何时 await，嵌套子作用域时是否使用？suspend 与 await 什么关系？
     
         await 与 async 配合使用，async 创建协程时返回的是 Job 子类 Deferred，可利用 await 获取返回值。
+        
         suspend 是 kotlin 关键字，生命函数可挂起当前协程，await 也是一个 suspend 函数。
     
     2. 如何嵌套子作用域？
         
         ~~需要管理 Job 即协程执行逻辑的生命周期时使用，简单而言需要 cancel 时使用。~~
+        
         协程创建与启动需要上下文、启动模式和协程体。
-        协程作用域包含着协程上下文，主要用来启动协程和追踪子协程。
+        
+        协程作用域包含着协程上下文，主要用来启动协程和追踪子协程。  
         协程作用域主要有 GlobalScope、coroutineScope { } 以及 supervisorScope { }。
+        
         挂起函数只被允许在协程或另一个挂起函数中调用。
-        CoroutineScope(Dispatchers.IO).async { } 调用 async 方法来创建协程。
+        
+        CoroutineScope(Dispatchers.IO).async { } 调用 async 方法来创建协程。  
         结构化并发，挂起函数中不该引入独立的作用域。
-        coroutineScope { async { } } 调用 coroutineScope 方法来创建协程作用域，该方法要声明可挂起。
+        
+        coroutineScope { async { } } 调用 coroutineScope 方法来创建协程作用域，该方法要声明可挂起。  
         结构化并发，可形成嵌套子作用域。
 
 2. livedata 作用是什么
@@ -37,13 +44,16 @@
 5. 本地数据与网络数据如何配合？
 
     架构示例中只是简单逻辑，其获取查询操作：先网络、然后若网络失败则本地。
+    
     指南中：设置间隔时长，超过间隔才网络。
 
 6. 为何使用缓存，简单缓存如何实现，如何配合使得数据源统一，并确保缓存生命周期？
 
     减少请求开销。内存级缓存实现需要利用数据结构，磁盘级即本地数据库或本地文件。
-    使用方式：增加操作，先走缓存，再走本地并同步网络更新本地进行通知；
+    
+    使用方式：增加操作，先走缓存，再走本地并同步网络更新本地进行通知；  
     改查，先走缓存，再结构化并发；删除操作，后走缓存。
+    
     ViewModel 持有 Repository，缓存也跟随 ViewModel 生存。
 
 ### 方案
