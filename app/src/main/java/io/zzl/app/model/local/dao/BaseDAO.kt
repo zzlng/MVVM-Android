@@ -9,16 +9,16 @@ import java.util.*
 interface BaseDAO<T> where T: BaseModel {
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun insert(modelData: T)
+    suspend fun insert(modelData: T)
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    fun insertAll(modelDataList: List<T>)
+    suspend fun insertAll(modelDataList: List<T>)
 
     @Update(onConflict = OnConflictStrategy.ABORT)
-    fun update(modelData: T)
+    suspend fun update(modelData: T)
 
     @Update(onConflict = OnConflictStrategy.ABORT)
-    fun updateList(modelDataList: List<T>)
+    suspend fun updateList(modelDataList: List<T>)
 
     companion object {
 
@@ -33,23 +33,23 @@ interface BaseDAO<T> where T: BaseModel {
                 modelData.modificationDate = Date(System.currentTimeMillis())
             }
 
-            fun insertWithTimestapData(modelData: P) {
+            suspend fun insertWithTimestapData(modelData: P) {
                 preInsert(modelData)
 //                this@DAOWrapper.daoInstance.insert(modelData)
                 daoInstance.insert(modelData)
             }
 
-            fun updateWithTimestapData(modelData: P) {
+            suspend fun updateWithTimestapData(modelData: P) {
                 preUpdate(modelData)
                 daoInstance.update(modelData)
             }
 
-            fun insertAllWithTimestapData(listData: List<P>) {
+            suspend fun insertAllWithTimestapData(listData: List<P>) {
                 listData.map { preInsert(it) }
                 daoInstance.insertAll(listData)
             }
 
-            fun updateListWithTimestapData(listData: List<P>) {
+            suspend fun updateListWithTimestapData(listData: List<P>) {
                 listData.map { preUpdate(it) }
                 daoInstance.updateList(listData)
             }

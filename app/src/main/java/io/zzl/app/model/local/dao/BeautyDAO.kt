@@ -12,10 +12,10 @@ interface BeautyDAO : BaseDAO<Beauty> {
             " THEN 'FALSE' ELSE 'TRUE' END has_new FROM Beauties")
     fun hasNew(lifetime: Long): Boolean
 
-    @Query("SELECT * FROM Beauties ORDER BY creation_date" +
+    @Query("SELECT * FROM Beauties ORDER BY beautyid" +
             " LIMIT (:page-1)*:numbers , :page*:numbers")
     suspend fun getBeautiesByPage(numbers: Int, page: Int): List<Beauty>
 
     @Query("DELETE FROM Beauties")
-    suspend fun deleteBeauties()
+    suspend fun cleanAll()
 }

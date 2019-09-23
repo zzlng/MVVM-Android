@@ -1,16 +1,16 @@
 package io.zzl.app.model
 
-import io.zzl.app.model.Result.Success
+import io.zzl.app.model.Resource.Success
 
 /**
  * A generic class that holds a value with its loading status.
  * @param <T>
  */
-sealed class Result<out R> {
+sealed class Resource<out R> {
 
-    data class Success<out T>(val data: T) : Result<T>()
-    data class Error(val exception: Exception) : Result<Nothing>()
-    object Loading : Result<Nothing>()
+    data class Success<out T>(val data: T) : Resource<T>()
+    data class Error(val exception: Exception) : Resource<Nothing>()
+    object Loading : Resource<Nothing>()
 
     override fun toString(): String {
         return when (this) {
@@ -22,7 +22,7 @@ sealed class Result<out R> {
 }
 
 /**
- * `true` if [Result] is of type [Success] & holds non-null [Success.data].
+ * `true` if [Resource] is of type [Success] & holds non-null [Success.data].
  */
-val Result<*>.succeeded
+val Resource<*>.succeeded
     get() = this is Success && data != null

@@ -1,8 +1,7 @@
 package io.zzl.app.model.repository
 
-import androidx.lifecycle.MutableLiveData
-import io.zzl.app.model.Result.Error
-import io.zzl.app.model.Result.Success
+import io.zzl.app.model.Resource
+import io.zzl.app.model.Resource.*
 import io.zzl.app.model.data.Beauty
 import io.zzl.app.model.local.dao.BaseDAO
 import io.zzl.app.model.local.dao.BeautyDAO
@@ -14,15 +13,14 @@ import java.util.concurrent.TimeUnit
 
 class PaoRepo constructor(
         private val remote: BeautyService,
-        private val local: BeautyDAO,
-        private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+        private val local: BeautyDAO
 ) {
 
     companion object {
-        val FRESH_TIMEOUT_HOURS = TimeUnit.HOURS.toMillis(2)
+        val FRESH_TIMEOUT_HOURS = TimeUnit.HOURS.toMillis(4)
     }
 
-    private val daoWrapper = BaseDAO.Companion.DAOWrapper(local)
+    private val wrapper = BaseDAO.Companion.DAOWrapper(local)
 
     private var cacheMemory: ConcurrentMap<String, Beauty>? = null
 
@@ -50,23 +48,11 @@ class PaoRepo constructor(
         return@withContext Error(Exception("Illegal state"))
     }
 
-    suspend fun getBeautiesByPage(numbers: Int, page: Int) = withContext(ioDispatcher) {
+    suspend fun getBeautiesByPage(numbers: Int, page: Int) = withContext(Dispatchers.IO) {
 
         cacheMemory?.let { cachedBeauties ->
-            return@withContext Success(cachedBeauties.values.sortedBy { it.creationDate })
+            return@withContext Success(cachedBeauties.values.sortedBy { it.id })
         }
-
-        val updated = local.hasNew(FRESH_TIMEOUT_HOURS)
-
-        try {
-            Success(local.getBeautiesByPage(numbers, page))
-        } catch (e: Exception) {
-            Error(e)
-        }
-
-        val loadLocal = async {
-
-        }.await()
 
         val refresh = launch {
             var cm: ConcurrentMap<String, Beauty>? = null
@@ -74,6 +60,41 @@ class PaoRepo constructor(
                 cm?.entries?.removeAll { it.value.used }
             }
         }
+    }
+
+    private suspend fun fetchTasksFromRemoteOrLocal(numbers: Int, page: Int): Resource<List<Beauty>> {
+
+        val isNew = local.hasNew(FRESH_TIMEOUT_HOURS)
+
+        if (isNew) {
+            return try {
+                Success(local.getBeautiesByPage(numbers, page))
+            } catch (e: Exception) {
+                local.cleanAll()
+                Error(e)
+            }
+        }
+
+        val resource = try {
+            Success(remote.getBeautiesByPage(numbers, page))
+        } catch (e: Exception) {
+            Error(e)
+        }
+
+        (resource as? Success)?.let {
+            coroutineScope {
+                withContext(Dispatchers.Default) {
+                    cacheMemory?.clear()
+                    resource.data.map { cacheBeauty(it) }
+                }
+                withContext(Dispatchers.IO) {
+                    local.cleanAll()
+                    wrapper.insertAllWithTimestapData(resource.data)
+                }
+            }
+        }
+
+        return resource
     }
 
     private fun cacheBeauty(beauty: Beauty): Beauty {
