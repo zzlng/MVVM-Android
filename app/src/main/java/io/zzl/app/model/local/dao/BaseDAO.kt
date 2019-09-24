@@ -12,7 +12,7 @@ interface BaseDAO<T> where T: BaseModel {
     suspend fun insert(modelData: T)
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun insertAll(modelDataList: List<T>)
+    suspend fun insertList(modelDataList: List<T>)
 
     @Update(onConflict = OnConflictStrategy.ABORT)
     suspend fun update(modelData: T)
@@ -44,9 +44,9 @@ interface BaseDAO<T> where T: BaseModel {
                 daoInstance.update(modelData)
             }
 
-            suspend fun insertAllWithTimestapData(listData: List<P>) {
+            suspend fun insertListWithTimestapData(listData: List<P>) {
                 listData.map { preInsert(it) }
-                daoInstance.insertAll(listData)
+                daoInstance.insertList(listData)
             }
 
             suspend fun updateListWithTimestapData(listData: List<P>) {

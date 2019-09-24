@@ -29,7 +29,7 @@ val remoteModule = module {
 
     single {
         val gson = GsonBuilder()
-                .setDateFormat("yyyy-MM-dd")
+//                .setDateFormat("yyyy-MM-dd")
                 .create()
 
         Retrofit.Builder()

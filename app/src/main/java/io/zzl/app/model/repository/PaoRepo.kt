@@ -83,13 +83,13 @@ class PaoRepo constructor(
 
         (resource as? Success)?.let {
             coroutineScope {
-                withContext(Dispatchers.Default) {
+                launch {
                     cacheMemory?.clear()
                     resource.data.map { cacheBeauty(it) }
                 }
-                withContext(Dispatchers.IO) {
+                launch {
                     local.cleanAll()
-                    wrapper.insertAllWithTimestapData(resource.data)
+                    wrapper.insertListWithTimestapData(resource.data)
                 }
             }
         }
