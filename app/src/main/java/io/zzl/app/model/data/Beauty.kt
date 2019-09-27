@@ -3,9 +3,12 @@ package io.zzl.app.model.data
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import com.google.gson.annotations.SerializedName
+import io.zzl.app.model.local.converter.DateConverter
 import java.util.*
 
+@TypeConverters(DateConverter::class)
 @Entity(tableName = "beauties")
 data class Beauty(
 
@@ -40,7 +43,9 @@ data class Beauty(
         @SerializedName("who")
         var who: String, // lijinshanmx
 
+        @ColumnInfo(name = "creation_date")
         override var creationDate: Date,
 
+        @ColumnInfo(name = "modification_date")
         override var modificationDate: Date
 ) : BaseModel

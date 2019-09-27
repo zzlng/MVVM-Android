@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.zzl.app.helper.Utils
-import io.zzl.app.model.repository.PaoRepo
+import io.zzl.app.model.repository.BeautyRepo
 import io.reactivex.Single
 import io.zzl.app.model.data.Beauty
 import kotlinx.coroutines.*
@@ -16,7 +16,7 @@ import kotlinx.coroutines.*
  * 处理（分拆、对应）从 repository 获取后的数据
  * Created by zzl on 9/11.
  */
-class PaoViewModel constructor(private val repo: PaoRepo) : ViewModel(){
+class PaoViewModel constructor(private val repo: BeautyRepo) : ViewModel(){
 
     val data = MutableLiveData<List<Beauty>>()
 

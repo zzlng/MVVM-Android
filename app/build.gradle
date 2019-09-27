@@ -23,7 +23,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    dataBinding{
+    dataBinding {
         enabled = true
     }
     compileOptions {
@@ -35,12 +35,12 @@ android {
     }
     // used by Room, to test migrations
     sourceSets {
-        androidTest.assets.srcDirs +=
-                files("$projectDir/schemas".toString())
+        androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
 }
 
 dependencies {
+    implementation 'luyao.util.ktx:AndroidUtilKTX:0.0.7-alpha01'
     implementation 'com.blankj:utilcodex:1.25.9'
     implementation 'com.github.javalong:RetrofitMocker:1.0.0'
 
@@ -64,15 +64,18 @@ dependencies {
     //rx android
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.1.8'
-    //autodispose
+    //auto dispose
     implementation 'com.uber.autodispose:autodispose:0.8.0'
     implementation 'com.uber.autodispose:autodispose-android-archcomponents:0.8.0'
 
-    //room (local)
+    //room
     implementation deps.room.runtime
     implementation 'android.arch.persistence.room:rxjava2:1.1.1'
 
-    //ViewModel
+    //paging
+    implementation deps.paging.runtime_ktx
+
+    //view model
     implementation deps.lifecycle.extensions
     implementation deps.lifecycle.viewmodel_ktx
     implementation deps.lifecycle.livedata_ktx

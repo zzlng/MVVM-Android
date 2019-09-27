@@ -5,7 +5,7 @@ import com.javalong.retrofitmocker.createMocker
 import io.zzl.app.helper.Constants
 import io.zzl.app.model.local.AppDatabase
 import io.zzl.app.model.remote.BeautyService
-import io.zzl.app.model.repository.PaoRepo
+import io.zzl.app.model.repository.BeautyRepo
 import io.zzl.app.viewmodel.PaoViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
@@ -22,7 +22,7 @@ val viewModelModule = module {
 
 val repoModule = module {
 
-    single { PaoRepo(get(), get()) }
+    single { BeautyRepo(get(), get()) }
 }
 
 val remoteModule = module {

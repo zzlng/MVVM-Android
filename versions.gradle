@@ -67,8 +67,7 @@ deps.support = support
 def room = [:]
 room.runtime = "androidx.room:room-runtime:$versions.room"
 room.testing = "androidx.room:room-testing:$versions.room"
-// kapt
-room.compiler = "androidx.room:room-compiler:$versions.room"
+room.compiler = "androidx.room:room-compiler:$versions.room" // kapt
 deps.room = room
 
 def lifecycle = [:]
@@ -78,8 +77,7 @@ lifecycle.java8 = "androidx.lifecycle:lifecycle-common-java8:$versions.lifecycle
 lifecycle.viewmodel_ktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle"
 lifecycle.livedata_ktx = "androidx.lifecycle:lifecycle-livedata-ktx:$versions.lifecycle"
 lifecycle.testing = "androidx.arch.core:core-testing:$versions.lifecycle"
-// kapt
-lifecycle.compiler = "androidx.lifecycle:lifecycle-compiler:$versions.lifecycle"
+lifecycle.compiler = "androidx.lifecycle:lifecycle-compiler:$versions.lifecycle" // kapt
 deps.lifecycle = lifecycle
 
 def activity = [:]
@@ -101,6 +99,7 @@ retrofit.runtime = "com.squareup.retrofit2:retrofit:$versions.retrofit"
 retrofit.gson = "com.squareup.retrofit2:converter-gson:$versions.retrofit"
 retrofit.mock = "com.squareup.retrofit2:retrofit-mock:$versions.retrofit"
 deps.retrofit = retrofit
+
 deps.okhttp_logging_interceptor = "com.squareup.okhttp3:logging-interceptor:${versions.okhttp_logging_interceptor}"
 
 def dagger = [:]
@@ -147,6 +146,8 @@ deps.koin = "org.koin:koin-android-viewmodel:$versions.koin"
 deps.klcok = "com.soywiz.korlibs.klock:klock-jvm:$versions.klock"
 
 def paging = [:]
+paging.runtime = "androidx.paging:paging-runtime:$versions.paging"
+paging.common = "androidx.paging:paging-common:$versions.paging"
 paging.runtime_ktx = "androidx.paging:paging-runtime-ktx:$versions.paging"
 paging.common_ktx = "androidx.paging:paging-common-ktx:$versions.paging"
 deps.paging = paging

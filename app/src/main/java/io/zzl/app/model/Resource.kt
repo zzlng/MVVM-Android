@@ -9,14 +9,19 @@ import io.zzl.app.model.Resource.Success
 sealed class Resource<out R> {
 
     data class Success<out T>(val data: T) : Resource<T>()
-    data class Error(val exception: Exception) : Resource<Nothing>()
-    object Loading : Resource<Nothing>()
+    data class Loading<out T>(val data: T) : Resource<T>()
+    class Error(
+            val tips: String,
+            val exception: Exception,
+            val resolve: () -> Error = {
+                Error(tips, exception)
+            }) : Resource<Nothing>()
 
     override fun toString(): String {
         return when (this) {
             is Success<*> -> "Success[data=$data]"
-            is Error -> "Error[exception=$exception]"
-            Loading -> "Loading"
+            is Loading -> "Loading[cache=$data]"
+            is Error -> "Error[tips=$tips\nexception=$exception]"
         }
     }
 }

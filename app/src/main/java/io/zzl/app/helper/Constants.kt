@@ -7,7 +7,7 @@ package io.zzl.app.helper
  */
 object Constants {
 
-    const val HOST_API="http://gank.io/api"
+    const val HOST_API = "http://gank.io/api"
 
-    const val HOST_PAO="http://jcodecraeer.com"
+    const val HOST_PAO = "http://jcodecraeer.com"
 }
