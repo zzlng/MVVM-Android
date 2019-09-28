@@ -74,6 +74,7 @@ dependencies {
 
     //paging
     implementation deps.paging.runtime_ktx
+    implementation deps.paging.common_ktx
 
     //view model
     implementation deps.lifecycle.extensions

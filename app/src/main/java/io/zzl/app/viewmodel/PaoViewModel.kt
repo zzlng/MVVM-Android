@@ -11,17 +11,13 @@ import io.reactivex.Single
 import io.zzl.app.model.data.Beauty
 import kotlinx.coroutines.*
 
-/**
- * 页面描述：PaoViewModel
- * 处理（分拆、对应）从 repository 获取后的数据
- * Created by zzl on 9/11.
- */
 class PaoViewModel constructor(private val repo: BeautyRepo) : ViewModel(){
 
+    // databiding
     val data = MutableLiveData<List<Beauty>>()
 
-    // livedata
-    fun loadBeauty() = viewModelScope.async {
+    // livedata 何处进行观察数据变化
+    fun loadBeauty() = viewModelScope.launch {
         repo.getBeautiesByPage(10, 1)
     }
 

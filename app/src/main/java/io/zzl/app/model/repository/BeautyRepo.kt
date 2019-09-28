@@ -2,21 +2,16 @@ package io.zzl.app.model.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.Transformations.map
-import androidx.lifecycle.liveData
-import androidx.paging.PagedList
 import androidx.paging.toLiveData
-import io.zzl.app.helper.Constants
 import io.zzl.app.model.Resource
-import io.zzl.app.model.Resource.*
+import io.zzl.app.model.Resource.Error
+import io.zzl.app.model.Resource.Loading
 import io.zzl.app.model.data.Beauty
 import io.zzl.app.model.local.dao.BaseDAO
 import io.zzl.app.model.local.dao.BeautyDAO
 import io.zzl.app.model.remote.BeautyService
 import kotlinx.coroutines.*
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
 import java.util.concurrent.TimeUnit
 
 class BeautyRepo constructor(
@@ -25,67 +20,39 @@ class BeautyRepo constructor(
 ) {
 
     companion object {
-        val BEAUTIES_SIZE = 10
+        const val BEAUTIES_SIZE = 10
         val FRESH_TIMEOUT_HOURS = TimeUnit.HOURS.toMillis(4)
     }
 
+    // 异常处理逻辑有待细化，暂先全局处理
     suspend fun getBeautiesByPage(page: Int): LiveData<out Resource<List<Beauty>>> = coroutineScope {
 
-        val result = MutableLiveData<Resource<Nothing>>()
+        try {
 
-        launch { tryToRefresh(page) }
+            launch { tryToRefresh(page) }
 
-        async {
-            try {
+            withContext(Dispatchers.IO) {
                 map(local.getBeautiesByPage(BEAUTIES_SIZE, page).toLiveData(BEAUTIES_SIZE)) {
-                    Success(it)
+                    Loading(it)
                 }
-            } catch (e: Exception) {
-                local.cleanAll()
-                MutableLiveData<Error>(Error("", e){})
             }
-        }.await()
+
+        } catch (e: Exception) {
+            val message = ""
+            cancel(message, e)
+            MutableLiveData<Error>(Error(message, e))
+        }
     }
 
     private suspend fun tryToRefresh(page: Int) {
 
         val isNew = local.hasNew(FRESH_TIMEOUT_HOURS)
+        if (isNew) return
 
-        if (!isNew) {
-            val remoteData = remote.getBeautiesByPage(BEAUTIES_SIZE, page)
+        val remoteData = remote.getBeautiesByPage(BEAUTIES_SIZE, page)
+        when (page) {
+            1 -> local.reloadList(remoteData)
+            else -> BaseDAO.Companion.DAOWrapper(local).insertListWithTimestapData(remoteData)
         }
-    }
-
-    private suspend fun fetchTasksFromRemoteOrLocal(numbers: Int, page: Int): LiveData<out Resource<List<Beauty>>> {
-
-        //TODO use paging
-
-        if (isNew) {
-            return try {
-//                Success(local.getBeautiesByPage(numbers, page))
-                map(local.getBeautiesByPage(numbers, page).toLiveData(numbers)) {
-                    Success(it)
-                }
-            } catch (e: Exception) {
-                local.cleanAll()
-                MutableLiveData<Error>(Error(e))
-            }
-        }
-
-        val resource = try {
-            Success(remote.getBeautiesByPage(numbers, page))
-        } catch (e: Exception) {
-            Error(e)
-        }
-
-        (resource as? Success)?.let {
-            coroutineScope {
-                launch {
-                    local.reloadList(resource.data)
-                }
-            }
-        }
-
-        return resource
     }
 }

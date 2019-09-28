@@ -10,18 +10,17 @@ sealed class Resource<out R> {
 
     data class Success<out T>(val data: T) : Resource<T>()
     data class Loading<out T>(val data: T) : Resource<T>()
-    class Error(
-            val tips: String,
-            val exception: Exception,
+    data class Error(
+            val message: String, val exception: Exception,
             val resolve: () -> Error = {
-                Error(tips, exception)
+                Error(message, exception)
             }) : Resource<Nothing>()
 
     override fun toString(): String {
         return when (this) {
             is Success<*> -> "Success[data=$data]"
             is Loading -> "Loading[cache=$data]"
-            is Error -> "Error[tips=$tips\nexception=$exception]"
+            is Error -> "Error[message=$message\nexception=$exception]"
         }
     }
 }

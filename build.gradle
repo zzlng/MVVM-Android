@@ -13,7 +13,7 @@ buildscript {
     repositories {
         google()
     }
-    ext.koin_version = '2.0.1'
+    ext.example = '0.0.0'
 }
 
 allprojects {
