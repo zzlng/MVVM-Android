@@ -8,7 +8,6 @@ import com.google.gson.annotations.SerializedName
 import io.zzl.app.model.local.converter.DateConverter
 import java.util.*
 
-@TypeConverters(DateConverter::class)
 @Entity(tableName = "beauties")
 data class Beauty(
 
