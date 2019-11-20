@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: 'com.github.sgtsilvio.gradle.android-retrofix' // should be applied after com.android.application
 
 android {
     compileSdkVersion build_versions.target_sdk
@@ -40,6 +41,11 @@ android {
 }
 
 dependencies {
+    implementation 'net.sourceforge.streamsupport:android-retrostreams:1.7.1' // for backporting streams
+    implementation 'net.sourceforge.streamsupport:android-retrofuture:1.7.1' // for backporting future
+    implementation 'org.threeten:threetenbp:1.4.0' // for backporting time
+    // or implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1' // https://github.com/JakeWharton/ThreeTenABP
+
     implementation 'luyao.util.ktx:AndroidUtilKTX:0.0.7-alpha01'
     implementation 'com.blankj:utilcodex:1.25.9'
     implementation 'com.github.javalong:RetrofitMocker:1.0.0'
@@ -55,7 +61,9 @@ dependencies {
     implementation deps.ktx.co_android
 
     //di
-    implementation deps.koin
+    implementation deps.koin.core
+    implementation deps.koin.android
+    implementation deps.koin.architecture
 
     //retrofit
     implementation deps.retrofit.runtime

@@ -11,12 +11,12 @@ interface BeautyDAO : BaseDAO<Beauty> {
 
     @Query("""
         SELECT CASE 
-                WHEN JULIANDAY('now', 'localtime') - MAX(creation_date) > :lifetime THEN 'FALSE'
-                ELSE 'TRUE'
-            END AS is_new
+                WHEN JULIANDAY('now', 'localtime') - MAX(creation_date) > :lifetime THEN 'TRUE'
+                ELSE 'FALSE'
+            END AS will_fetch
         FROM Beauties
     """)
-    fun hasNew(lifetime: Long): Boolean
+    fun shouldFetch(lifetime: Long): Boolean
 
     @Query("""
         SELECT *
@@ -25,6 +25,13 @@ interface BeautyDAO : BaseDAO<Beauty> {
         LIMIT :page * :count
     """)
     suspend fun getBeautiesByPage(count: Int, page: Int): DataSource.Factory<Int, Beauty>
+
+    @Query("""
+        SELECT *
+        FROM Beauties
+        ORDER BY beautyid
+    """)
+    suspend fun getBeautiesByPage(): DataSource.Factory<Int, Beauty>
 
     @Query("DELETE FROM Beauties")
     suspend fun cleanAll()

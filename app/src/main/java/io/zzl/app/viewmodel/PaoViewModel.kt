@@ -1,15 +1,14 @@
 package io.zzl.app.viewmodel
 
-import androidx.databinding.ObservableBoolean
-import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.zzl.app.helper.Utils
-import io.zzl.app.model.repository.BeautyRepo
-import io.reactivex.Single
 import io.zzl.app.model.data.Beauty
-import kotlinx.coroutines.*
+import io.zzl.app.model.repository.BeautyRepo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class PaoViewModel constructor(private val repo: BeautyRepo) : ViewModel(){
 
@@ -18,11 +17,12 @@ class PaoViewModel constructor(private val repo: BeautyRepo) : ViewModel(){
 
     // livedata 何处进行观察数据变化
     fun loadBeauty() = viewModelScope.launch {
-        repo.getBeautiesByPage(10, 1)
+        repo.getBeautiesByPage(1)
     }
 
     fun a() = CoroutineScope(Dispatchers.IO).async {  }
 
+/*
         //////////////////data//////////////
         val loading= ObservableBoolean(false)
         val content = ObservableField<String>()
@@ -50,5 +50,5 @@ class PaoViewModel constructor(private val repo: BeautyRepo) : ViewModel(){
 
         private fun startLoad()=loading.set(true)
         private fun stopLoad()=loading.set(false)
-    }
+    }*/
 }

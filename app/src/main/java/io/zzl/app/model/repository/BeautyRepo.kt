@@ -24,21 +24,21 @@ class BeautyRepo constructor(
         val FRESH_TIMEOUT_HOURS = TimeUnit.HOURS.toMillis(4)
     }
 
-    // 异常处理逻辑有待细化，暂先全局处理
+    // 异常处理逻辑有待细化，暂先粗放处理
     suspend fun getBeautiesByPage(page: Int): LiveData<out Resource<List<Beauty>>> = coroutineScope {
 
         try {
-
             launch { tryToRefresh(page) }
 
             withContext(Dispatchers.IO) {
-                map(local.getBeautiesByPage(BEAUTIES_SIZE, page).toLiveData(BEAUTIES_SIZE)) {
+//                local.getBeautiesByPage(BEAUTIES_SIZE, page).create().invalidate()
+                map(local.getBeautiesByPage().toLiveData(BEAUTIES_SIZE)) {
                     Loading(it)
                 }
             }
 
         } catch (e: Exception) {
-            val message = ""
+            val message = e.message?:""
             cancel(message, e)
             MutableLiveData<Error>(Error(message, e))
         }
@@ -46,13 +46,14 @@ class BeautyRepo constructor(
 
     private suspend fun tryToRefresh(page: Int) {
 
-        val isNew = local.hasNew(FRESH_TIMEOUT_HOURS)
-        if (isNew) return
+        val willFetch = local.shouldFetch(FRESH_TIMEOUT_HOURS)
 
-        val remoteData = remote.getBeautiesByPage(BEAUTIES_SIZE, page)
-        when (page) {
-            1 -> local.reloadList(remoteData)
-            else -> BaseDAO.Companion.DAOWrapper(local).insertListWithTimestapData(remoteData)
+        if (willFetch) {
+            val remoteData = remote.getBeautiesByPage(BEAUTIES_SIZE, page)
+            when (page) {
+                1 -> local.reloadList(remoteData)
+                else -> BaseDAO.Companion.DAOWrapper(local).insertListWithTimestapData(remoteData)
+            }
         }
     }
 }

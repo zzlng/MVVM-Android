@@ -11,8 +11,9 @@ sealed class Resource<out R> {
     data class Success<out T>(val data: T) : Resource<T>()
     data class Loading<out T>(val data: T) : Resource<T>()
     data class Error(
-            val message: String, val exception: Exception,
-            val resolve: () -> Error = {
+            val message: String,
+            val exception: Exception,
+            val processing: () -> Error = {
                 Error(message, exception)
             }) : Resource<Nothing>()
 

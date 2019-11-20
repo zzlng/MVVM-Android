@@ -1,10 +1,10 @@
 package io.zzl.app.model.data
 
-import java.util.*
+import java.time.Instant
 
 interface BaseModel {
 
-    var creationDate: Date
+    var creationDate: Instant
 
-    var modificationDate: Date
+    var modificationDate: Instant
 }

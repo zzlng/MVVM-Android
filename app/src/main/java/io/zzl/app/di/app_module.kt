@@ -8,7 +8,7 @@ import io.zzl.app.model.remote.BeautyService
 import io.zzl.app.model.repository.BeautyRepo
 import io.zzl.app.viewmodel.PaoViewModel
 import org.koin.android.ext.koin.androidApplication
-import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

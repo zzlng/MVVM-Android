@@ -11,13 +11,12 @@ import androidx.lifecycle.LifecycleOwner
 import com.uber.autodispose.AutoDispose
 import com.uber.autodispose.SingleSubscribeProxy
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider
+import io.reactivex.Single
 import io.zzl.app.BuildConfig
 import io.zzl.app.R
 import io.zzl.app.databinding.PaoActivityBinding
 import io.zzl.app.viewmodel.PaoViewModel
-import io.reactivex.Single
-import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PaoActivity : AppCompatActivity() {
 
@@ -47,7 +46,7 @@ class PaoActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+    /*override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.action_refresh -> mViewModel.loadArticle()
                     .bindLifeCycle(this)
@@ -56,7 +55,7 @@ class PaoActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
+    }*/
 
     //处理错误
     private fun dispatchFailure(error: Throwable?, length: Int = Toast.LENGTH_SHORT) {

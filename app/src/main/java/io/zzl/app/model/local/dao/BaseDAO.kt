@@ -4,7 +4,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Update
 import io.zzl.app.model.data.BaseModel
-import java.util.*
+import java.time.Instant
 
 interface BaseDAO<T> where T: BaseModel {
 
@@ -22,15 +22,19 @@ interface BaseDAO<T> where T: BaseModel {
 
     companion object {
 
-        open class DAOWrapper<P, T>(private val daoInstance: T) where T: BaseDAO<P>, P: BaseModel {
+        @Suppress("NewAPI")
+        open class DAOWrapper<P, K>(private val daoInstance: K) where K: BaseDAO<P>, P: BaseModel {
 
             private fun preInsert(modelData: P) {
-                modelData.creationDate = Date(System.currentTimeMillis())
-                modelData.modificationDate = Date(System.currentTimeMillis())
+//                modelData.creationDate = Date(System.currentTimeMillis())
+//                modelData.modificationDate = Date(System.currentTimeMillis())
+                modelData.creationDate = Instant.now()
+                modelData.modificationDate = Instant.now()
             }
 
             private fun preUpdate(modelData: P) {
-                modelData.modificationDate = Date(System.currentTimeMillis())
+//                modelData.modificationDate = Date(System.currentTimeMillis())
+                modelData.modificationDate = Instant.now()
             }
 
             suspend fun insertWithTimestapData(modelData: P) {

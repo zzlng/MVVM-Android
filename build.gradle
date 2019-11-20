@@ -7,23 +7,23 @@ buildscript {
         classpath deps.kotlin.plugin
         classpath deps.kotlin.allopen
         classpath deps.navigation.safe_args_plugin
+        classpath 'gradle.plugin.com.github.sgtsilvio.gradle:android-retrofix:0.3.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
-    }
-    repositories {
-        google()
     }
     ext.example = '0.0.0'
 }
 
 allprojects {
     addRepos(repositories)
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-repositories {
-    google()
-}

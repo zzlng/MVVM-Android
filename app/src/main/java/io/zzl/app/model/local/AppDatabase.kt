@@ -18,13 +18,15 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
 
-//        @Volatile
-//        private var INSTANCE: AppDatabase? = null
-//
-//        fun getInstance(context: Context): AppDatabase =
-//                INSTANCE ?: synchronized(this) {
-//                    INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
-//                }
+/*
+        @Volatile
+        private var INSTANCE: AppDatabase? = null
+
+        fun getInstance(context: Context): AppDatabase =
+                INSTANCE ?: synchronized(this) {
+                    INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
+                }
+*/
 
         private var INSTANCE: AppDatabase? = null
 
@@ -41,7 +43,6 @@ abstract class AppDatabase : RoomDatabase() {
         private val CALLBACK = object : RoomDatabase.Callback() {
             override fun onCreate(db: SupportSQLiteDatabase) {
                 super.onCreate(db)
-                return
                 /*CoroutineScope(Dispatchers.IO).launch {
                     val getAnnotation = AppDatabase.javaClass.getAnnotation(Database::class.java)
                     getAnnotation.entities.map {
@@ -56,6 +57,7 @@ abstract class AppDatabase : RoomDatabase() {
                                 " END;")
                     }
                 }*/
+                return
             }
         }
     }

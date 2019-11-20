@@ -3,10 +3,8 @@ package io.zzl.app.model.data
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
 import com.google.gson.annotations.SerializedName
-import io.zzl.app.model.local.converter.DateConverter
-import java.util.*
+import java.time.Instant
 
 @Entity(tableName = "beauties")
 data class Beauty(
@@ -43,8 +41,8 @@ data class Beauty(
         var who: String, // lijinshanmx
 
         @ColumnInfo(name = "creation_date")
-        override var creationDate: Date,
+        override var creationDate: Instant,
 
         @ColumnInfo(name = "modification_date")
-        override var modificationDate: Date
+        override var modificationDate: Instant
 ) : BaseModel
